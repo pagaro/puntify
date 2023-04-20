@@ -6,7 +6,9 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: puntify
       MONGO_INITDB_ROOT_PASSWORD: puntify
-    restart: always 
+    restart: always
+    ports:
+      - "27017:27017"
     volumes:
       - db_data:/data/db
       - db_config:/data/configdb
