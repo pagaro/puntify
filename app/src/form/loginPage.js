@@ -50,8 +50,10 @@ function LoginPage() {
                     <input type="password" value={fields.password} onChange={e => setFields({...fields , password: e.target.value})}/>
                 </label>
                 <br/>
+                <div>Don’t have an account? <a href={'/register'}>Register</a></div>
                 <button type="submit">Login</button>
             </form>
+
             <ToastContainer/>
         </div>
     );

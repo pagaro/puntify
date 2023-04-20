@@ -1,8 +1,6 @@
-import asyncio
 from datetime import datetime, timedelta
 import jwt
-import pymongo
-from fastapi import Depends, HTTPException,status
+from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel, EmailStr
 from typing import Optional
@@ -25,6 +23,7 @@ user_collection = db["users"]
 # Remplacez ceci par votre propre clé secrète
 SECRET_KEY = "123"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
 
 class UserBase(BaseModel):
     email: EmailStr
@@ -103,7 +102,7 @@ class CRUDUser:
         return result.deleted_count > 0
 
     @staticmethod
-    async def get_by_id(user_id: str) -> UserOut:
+    async def get_by_id(user_id: str) -> Optional[UserOut]:
         result = await db.users.find_one({"_id": ObjectId(user_id)})
         if result:
             return UserOut(**result)
