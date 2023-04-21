@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.user_routes import router as user_router
+from src.music_routes import router as music_router
 
 app = FastAPI()
 
 app.include_router(user_router)
+app.include_router(music_router)
 
 origins = [
     "http://localhost:3000",  # L'origine de votre application React

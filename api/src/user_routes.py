@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends, status
-from fastapi.security import HTTPBasic, HTTPBasicCredentials, OAuth2PasswordRequestForm
+from fastapi.security import HTTPBasic, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 from pydantic import BaseModel
 

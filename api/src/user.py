@@ -4,25 +4,15 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel, EmailStr
 from typing import Optional
-from motor.motor_asyncio import AsyncIOMotorClient
 from bson.objectid import ObjectId
 from passlib.hash import bcrypt
-
-# Remplacez ces variables par vos propres valeurs
-username = "api"
-password = "api"
-database_name = "puntify"
-# Créez l'URI de connexion en incluant le nom d'utilisateur et le mot de passe
-# todo a changer quand ca sera sur docker
-connection_uri = f"mongodb://{username}:{password}@localhost/{database_name}"
-
-client = AsyncIOMotorClient(connection_uri)
-db = client["puntify"]
-user_collection = db["users"]
+from db import get_user_collection
 
 # Remplacez ceci par votre propre clé secrète
 SECRET_KEY = "123"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
+user_collection = get_user_collection()
 
 
 class UserBase(BaseModel):
@@ -103,7 +93,7 @@ class CRUDUser:
 
     @staticmethod
     async def get_by_id(user_id: str) -> Optional[UserOut]:
-        result = await db.users.find_one({"_id": ObjectId(user_id)})
+        result = await user_collection.find_one({"_id": ObjectId(user_id)})
         if result:
             return UserOut(**result)
         return None
@@ -131,7 +121,6 @@ class CRUDUser:
         try:
             payload = jwt.decode(token, key=SECRET_KEY, algorithms=["HS256"])
             user_id = payload.get("sub")
-            print(payload)
             if user_id is None:
                 raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 

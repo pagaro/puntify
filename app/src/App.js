@@ -5,6 +5,7 @@ import LoginPage from "./form/loginPage";
 import RegisterPage from "./form/registerPage";
 import MusicPage from "./music/musicPage";
 import PlayPage from "./music/playPage";
+import UploadPage from "./form/uploadPage";
 
 // Définition du composant PrivateRoute qui vérifie la présence du token dans le localStorage
 const PrivateRoute = () => {
@@ -24,9 +25,8 @@ function App() {
 
             <Route exact path='/music' element={<PrivateRoute/>}>
                 <Route exact path='/music' element={<MusicPage/>}/>
-            </Route>
-            <Route exact path='/play/:id' element={<PrivateRoute/>}>
-                <Route path="/play/:id" element={<PlayPage/>}/>
+                <Route path="/music/play/:id" element={<PlayPage/>}/>
+                <Route path="/music/upload" element={<UploadPage/>}/>
             </Route>
         </Routes>
 
