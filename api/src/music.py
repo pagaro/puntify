@@ -51,8 +51,7 @@ class CRUDMusic:
         file = music_doc.pop("file")
 
         music_file_gridfs = get_gridfs(bucket_name="music")
-        # gridfs = get_gridfs(bucket_name="music_files")
-        # file_id = await gridfs. put(file.file, filename=file.filename, content_type=file.content_type)
+
         file_id = await music_file_gridfs.upload_from_stream(file.filename, file.file)
 
         music_doc["file_id"] = file_id
@@ -74,7 +73,7 @@ class CRUDMusic:
         music_out = MusicOut(**music)
         # Assurez-vous que l'URL correspond à la route où vous servez les fichiers audio
         music_out.id = str(music["_id"])
-        music_out.url = f"http://localhost:8000/music/stream/{str(music['file_id'])}"
+        music_out.url = f"http://localhost:8000/stream/{str(music['file_id'])}"
         return music_out
 
     @staticmethod

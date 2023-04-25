@@ -28,27 +28,27 @@ services:
       ME_CONFIG_MONGODB_SERVER: db
       ME_CONFIG_MONGODB_HOSTNAME: db
 
-  api:
-    container_name: api
-    build: ./api
-    ports:
-      - "8000:8000"
-    links:
-      - db
-    restart: always
-    depends_on:
-      - db
+#  api:
+#    container_name: api
+#    build: ./api
+#    ports:
+#      - "8000:8000"
+#    links:
+#      - db
+#    restart: always
+#    depends_on:
+#      - db
 
-  app:
-    container_name: app
-    build: ./app
-    ports:
-      - "3000:3000"
-    restart: always
-    links:
-      - db
-    depends_on:
-      - api
+#  app:
+#    container_name: app
+#    build: ./app
+#    ports:
+#      - "3000:3000"
+#    restart: always
+#    links:
+#      - db
+#    depends_on:
+#      - api
 
 volumes:
   db_data:

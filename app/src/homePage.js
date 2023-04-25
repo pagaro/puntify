@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import userLoginStatus from "./form/userLoginStatus";
+import isTokenValid from "./security/isTokenValid";
 
 function HomePage() {
     const [fields, setFields] = useState({isLogged: false});
 
     // Utilisation du Hook useEffect pour appeler la fonction userLoginStatus lors du chargement de la page
     useEffect(() => {
-        userLoginStatus().then((result) => {
-            setFields({...fields, isLogged: result.isLoggedIng});
+        isTokenValid().then((result) => {
+            console.log(result)
+            if (result) {
+                setFields({...fields, isLogged: true});
+            }
         })
     }, []);
 
@@ -17,6 +20,7 @@ function HomePage() {
         return (<div className="lobby-page">
             <div className="lobby">
                 <h1>Welcome to the Puntify Home Page</h1>
+                <a href="music">Liste des musiques</a>
             </div>
         </div>);
     }

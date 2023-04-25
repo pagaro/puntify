@@ -11,7 +11,7 @@ const PlayPage = () => {
         const fetchMusicURL = async () => {
             try {
                 // Remplacez cette URL par l'URL de votre API pour récupérer le fichier audio
-                const response = await axios.get(`http://localhost:8000/music/${id}`);
+                const response = await axios.get(`http://localhost:8000/music/${id}`,{ withCredentials: true });
                 setMusicURL(response.data.url);
             } catch (error) {
                 console.error("Erreur lors de la récupération de l'URL de la musique :", error);

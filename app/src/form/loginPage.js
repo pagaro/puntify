@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
-import userLoginStatus from "./userLoginStatus";
 import './form.css';
 import qs from "qs";
+import { useCookies } from 'react-cookie'
+import Cookies from "js-cookie";
 import {toast, ToastContainer} from "react-toastify";
+import isTokenValid from "../security/isTokenValid";
 
 function LoginPage() {
     const [fields, setFields] = useState({email:'',password:''})
     const navigate = useNavigate();
+    const [cookies, setCookie] = useCookies(['access_token', 'refresh_token'])
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -21,7 +24,11 @@ function LoginPage() {
                         "Content-Type": "application/x-www-form-urlencoded", // Définissez l'en-tête 'Content-Type' approprié
                     },
                 });
-            localStorage.setItem('token', response.data.access_token)
+
+            // Cookies.set('access_token', response.data.access_token , { domain: 'localhost:3000' });
+            setCookie('access_token', response.data.access_token, { path: '/'})
+            console.log(response.data.access_token)
+            console.log(Cookies.get('access_token'))
             navigate('/');
         } catch (error) {
             console.log(error)
@@ -30,8 +37,8 @@ function LoginPage() {
     }
 
     useEffect(()=> {
-        userLoginStatus().then((result)=> {
-            if (result.isLoggedIng){
+        isTokenValid().then((result)=> {
+            if (result){
                 navigate("/");
             }
         })

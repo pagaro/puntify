@@ -1,4 +1,3 @@
-from motor.aiohttp import AIOHTTPGridFS
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
 
 username = "api"
@@ -24,7 +23,7 @@ def get_music_collection():
     return db["musics"]
 
 
-def get_gridfs(bucket_name: str) -> AsyncIOMotorGridFSBucket:
+def get_gridfs(bucket_name: str = "music") -> AsyncIOMotorGridFSBucket:
     db = get_db()
     gridfs = AsyncIOMotorGridFSBucket(db, bucket_name)
     return gridfs

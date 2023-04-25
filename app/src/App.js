@@ -1,19 +1,14 @@
 import React from "react";
-import {Navigate, Outlet, Route, Routes} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import HomePage from "./homePage";
 import LoginPage from "./form/loginPage";
 import RegisterPage from "./form/registerPage";
 import MusicPage from "./music/musicPage";
 import PlayPage from "./music/playPage";
 import UploadPage from "./form/uploadPage";
+import PrivateRoute from "./security/PrivateRoute";
 
-// Définition du composant PrivateRoute qui vérifie la présence du token dans le localStorage
-const PrivateRoute = () => {
-    const token = localStorage.getItem('token');
-    // Si le token est présent, afficher les éléments enfants de la route parente avec Outlet
-    // Sinon, rediriger l'utilisateur vers la page de connexion avec Navigate
-    return token ? <Outlet/> : <Navigate to="/login"/>;
-}
+
 
 // Définition du composant principal App qui utilise la bibliothèque de routage react-router-dom
 function App() {

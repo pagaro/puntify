@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import './header.css'
 import {useNavigate} from "react-router-dom";
+import isTokenValid from "../security/isTokenValid";
 
 const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        setIsLoggedIn(!!token);
+        isTokenValid().then((result) => {
+            if (result) {
+                setIsLoggedIn(true);
+            }
+        })
     }, []);
 
     const handleLogin = () => {
