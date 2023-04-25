@@ -17,13 +17,9 @@ class TokenToto(BaseModel):
 
 async def is_token_valid(request: Request) -> Optional[UserOut]:
     token = request.cookies.get("access_token")
-    print('toto')
-    print(token)
+
     try:
-        print("titi")
         payload_token = jwt.decode(token, key=SECRET_KEY, algorithms=ALGORITHM)
-        print("yoyo")
-        print(payload_token)
 
         user = await CRUDUser.get_by_id(payload_token.get("user_id"))
         if user:
@@ -36,7 +32,11 @@ async def is_token_valid(request: Request) -> Optional[UserOut]:
 
 
 async def is_user_admin(user: UserOut = Depends(is_token_valid)):
-    return user.admin
+    print('toto')
+    print(user)
+    if user.admin:
+        return user.admin
+    raise HTTPException(status_code=status.HTTP_418_IM_A_TEAPOT, detail="Your are note admin")
 
 
 async def token_create(user: UserOutPass):

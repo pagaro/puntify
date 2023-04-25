@@ -27,6 +27,7 @@ const UploadPage = () => {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
+                withCredentials: true,
             });
             toast("Fichier musical téléchargé avec succès.")
         } catch (error) {
