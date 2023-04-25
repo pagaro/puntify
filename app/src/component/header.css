@@ -8,12 +8,13 @@ header {
     color: white;
 }
 
-header h1 {
-    margin: 0;
+header .logo {
     font-size: 1.5em;
+    text-decoration:none;
+    color: white;
 }
 
-header button {
+header .button button{
     background-color: #4CAF50;
     border: none;
     color: white;
@@ -27,6 +28,6 @@ header button {
     padding: 6px 12px;
 }
 
-header button:hover {
+header .button button:hover {
     background-color: #45a049;
 }

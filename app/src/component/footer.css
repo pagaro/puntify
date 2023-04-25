@@ -1,0 +1,30 @@
+/* src/components/Footer.css */
+
+.footer {
+    background-color: #181818;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.footer-controls {
+    display: flex;
+    align-items: center;
+}
+
+.footer-controls button {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.footer-controls button:hover {
+    color: #1db954;
+}

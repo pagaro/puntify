@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import isTokenValid from "./security/isTokenValid";
 
 function HomePage() {
     const [fields, setFields] = useState({isLogged: false});
+    const navigate = useNavigate();
 
     // Utilisation du Hook useEffect pour appeler la fonction userLoginStatus lors du chargement de la page
     useEffect(() => {
@@ -15,12 +16,17 @@ function HomePage() {
         })
     }, []);
 
+    const handleMusic = () => {
+        navigate('/music')
+    };
+
+
     // Si l'utilisateur est connecté, afficher la page LoggedHomePage
     if (fields.isLogged) {
         return (<div className="lobby-page">
             <div className="lobby">
                 <h1>Welcome to the Puntify Home Page</h1>
-                <a href="music">Liste des musiques</a>
+                <button onClick={handleMusic}>Liste des musiques</button>
             </div>
         </div>);
     }
