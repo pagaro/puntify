@@ -8,7 +8,6 @@ const UploadPage = () => {
     const [musicData, setMusicData] = useState({
         name: "",
         artist: "",
-        duration: 0,
         file: null,
     });
 
@@ -18,9 +17,7 @@ const UploadPage = () => {
         const formData = new FormData();
         formData.append("name", musicData.name);
         formData.append("artist", musicData.artist);
-        formData.append("duration", musicData.duration);
         formData.append("file", musicData.file);
-        console.log(musicData)
 
         try {
             const response = await axios.post("http://localhost:8000/music/", formData,{
@@ -31,7 +28,8 @@ const UploadPage = () => {
             });
             toast("Fichier musical téléchargé avec succès.")
         } catch (error) {
-            toast("Erreur lors du téléchargement du fichier musical.")
+            toast("Erreur lors du téléchargement du fichier musical.\n" + error.response.data.detail)
+            console.log(error)
         }
     };
 
@@ -52,11 +50,6 @@ const UploadPage = () => {
                 <label>
                     Artiste :
                     <input type="text" name="artist" value={musicData.artist} onChange={handleChange} required />
-                </label>
-                <br />
-                <label>
-                    Durée :
-                    <input type="number" name="duration" value={musicData.duration} onChange={handleChange} required />
                 </label>
                 <br />
                 <label>

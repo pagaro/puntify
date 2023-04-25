@@ -27,8 +27,6 @@ function LoginPage() {
 
             // Cookies.set('access_token', response.data.access_token , { domain: 'localhost:3000' });
             setCookie('access_token', response.data.access_token, { path: '/'})
-            console.log(response.data.access_token)
-            console.log(Cookies.get('access_token'))
             navigate('/');
         } catch (error) {
             console.log(error)

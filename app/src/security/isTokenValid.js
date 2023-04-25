@@ -8,9 +8,7 @@ async function isTokenValid() {
     }
 
     try {
-        const response = await axios.get("http://localhost:8000/verify-token",{ withCredentials: true });
-
-        return true;
+        return await axios.get("http://localhost:8000/verify-token", {withCredentials: true});
     } catch (error) {
         if (error.response && error.response.status === 401) {
             return false;

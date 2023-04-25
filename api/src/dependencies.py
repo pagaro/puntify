@@ -32,8 +32,6 @@ async def is_token_valid(request: Request) -> Optional[UserOut]:
 
 
 async def is_user_admin(user: UserOut = Depends(is_token_valid)):
-    print('toto')
-    print(user)
     if user.admin:
         return user.admin
     raise HTTPException(status_code=status.HTTP_418_IM_A_TEAPOT, detail="Your are note admin")

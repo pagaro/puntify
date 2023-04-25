@@ -1,9 +1,12 @@
 # src/music.py
+import io
+import os
 from typing import Optional
 from pydantic import BaseModel
+from tinytag import TinyTag
 from bson import ObjectId
 from typing import List
-from fastapi import UploadFile, HTTPException
+from fastapi import UploadFile, HTTPException, status
 from starlette.responses import StreamingResponse
 
 from db import get_music_collection, get_gridfs
@@ -15,7 +18,6 @@ class MusicBase(BaseModel):
     name: str
     artist: str
     cover_art: Optional[str] = None
-    duration: int
 
 
 class MusicIn(MusicBase):
@@ -27,8 +29,9 @@ class MusicInUpdate(MusicBase):
 
 
 class MusicOut(MusicBase):
-    id: Optional[str] = None
+    id: str
     url: Optional[str] = None
+    duration: int
 
     class Config:
         schema_extra = {
@@ -48,12 +51,32 @@ class CRUDMusic:
     async def create(music: MusicIn) -> MusicOut:
         music_doc = music.dict()
         file_music = music_doc.pop("file")
+        temp_file = os.path.join("./", file_music.filename)
+        try:
+            with open(temp_file, 'wb') as f:
+                f.write(await file_music.read())
 
-        music_file_gridfs = get_gridfs(bucket_name="music")
+            tag = TinyTag.get(temp_file)
+            duration = tag.duration
+            title = tag.title
+            year = tag.year
 
-        file_id = await music_file_gridfs.upload_from_stream(file_music.filename, file_music.file)
+
+
+            music_file_gridfs = get_gridfs(bucket_name="music")
+            with open(temp_file, 'rb') as f:
+                file_id = await music_file_gridfs.upload_from_stream(file_music.filename, f)
+
+            os.remove(temp_file)
+
+        except Exception as e:
+            print(e)
+            raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="Invalid song format")
 
         music_doc["file_id"] = file_id
+        music_doc["title"] = title
+        music_doc["year"] = year
+        music_doc["duration"] = duration
         music_id = await music_collection.insert_one(music_doc)
         return MusicOut(**music_doc, id=str(music_id.inserted_id))
 
@@ -69,7 +92,7 @@ class CRUDMusic:
         if not music:
             raise HTTPException(status_code=404, detail="La musique n'a pas été trouvée")
 
-        music_out = MusicOut(**music)
+        music_out = MusicOut(**music, id=music_id)
         # Assurez-vous que l'URL correspond à la route où vous servez les fichiers audio
         music_out.id = str(music["_id"])
         music_out.url = f"http://localhost:8000/stream/{str(music['file_id'])}"

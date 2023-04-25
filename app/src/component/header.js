@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './header.css'
 import {useNavigate} from "react-router-dom";
 import isTokenValid from "../security/isTokenValid";
@@ -8,11 +8,13 @@ const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
 
-    isTokenValid().then((result) => {
-        if (result) {
-            setIsLoggedIn(result);
-        }
-    })
+    useEffect(()=> {
+        isTokenValid().then((result)=> {
+            if (result) {
+                setIsLoggedIn(true);
+            }
+        })
+    },[navigate])
 
     const handleHome = () => {
         navigate('/')

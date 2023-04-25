@@ -1,15 +1,17 @@
-/* src/components/Footer.css */
+/* src/components/footer.css */
 
 .footer {
-    background-color: #181818;
     display: flex;
-    align-items: center;
     justify-content: center;
-    height: 80px;
+    align-items: center;
     position: fixed;
     bottom: 0;
-    width: 100%;
-    z-index: 100;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background-color: #282c34;
+    color: white;
+    padding: 0 20px;
 }
 
 .footer-controls {
@@ -20,11 +22,37 @@
 .footer-controls button {
     background-color: transparent;
     border: none;
-    color: #fff;
-    font-size: 16px;
+    color: white;
+    font-size: 18px;
+    margin: 0 10px;
     cursor: pointer;
 }
 
-.footer-controls button:hover {
-    color: #1db954;
+.footer-controls span {
+    margin: 0 10px;
+}
+
+.footer-controls input[type='range'] {
+    -webkit-appearance: none;
+    width: 300px;
+    height: 5px;
+    background: #535353;
+    outline: none;
+    cursor: pointer;
+}
+
+.footer-controls input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: white;
+    cursor: pointer;
+}
+
+.footer-controls input[type='range']::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: white;
+    cursor: pointer;
 }
