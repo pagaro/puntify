@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Route, Routes} from 'react-router-dom';
 import HomePage from "./homePage";
 import LoginPage from "./form/loginPage";
@@ -9,10 +9,7 @@ import UploadPage from "./form/uploadPage";
 import PrivateRoute from "./security/PrivateRoute";
 import Footer from "./component/footer";
 import Header from "./component/header";
-import axios from "axios";
-
 function App() {
-    const [urlMusic, setUrlMusic] = useState(null);
     const [id, setId] = useState(null);
 
     // Créez une fonction pour gérer le clic sur une musique
@@ -20,19 +17,11 @@ function App() {
         setId(id)
     };
 
-    useEffect(() => {
-        const fetchUrlMusic = async () => {
-            try {
-                // Remplacez cette URL par l'URL de votre API pour récupérer le fichier audio
-                const response = await axios.get(`http://localhost:8000/music/${id}`,{ withCredentials: true });
-                setUrlMusic(response.data.url);
-            } catch (error) {
-                console.error("Erreur lors de la récupération de l'URL de la musique :", error);
-            }
-        };
+    const handleOnClose = () => {
+        setId(null)
+    }
 
-        fetchUrlMusic();
-    }, [id]);
+
 
     return (
         <>
@@ -49,7 +38,7 @@ function App() {
                 </Route>
 
             </Routes>
-            <Footer urlMusic={urlMusic}/>
+            <Footer idMusic={id} onClose={handleOnClose}/>
         </>
     );
 }
