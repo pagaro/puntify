@@ -9,7 +9,7 @@
     left: 0;
     right: 0;
     height: 60px;
-    background-color: #282c34;
+    background-color: #333;
     color: white;
     padding: 0 20px;
 }
@@ -55,4 +55,8 @@
     height: 15px;
     background: white;
     cursor: pointer;
+}
+
+.footer-controls .close{
+    font-size: 3em;
 }

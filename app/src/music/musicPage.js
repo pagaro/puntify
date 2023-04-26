@@ -3,7 +3,7 @@ import React, {useState, useEffect} from "react";
 import axios from "axios";
 import './music.css'
 
-const MusicList =  ({ onMusicClick })  => {
+const MusicList = ({onMusicClick}) => {
     const [musicList, setMusicList] = useState([]);
 
     useEffect(() => {
@@ -27,15 +27,17 @@ const MusicList =  ({ onMusicClick })  => {
     };
 
     return (
-        <div className="music-list">
-            <h1>Liste des musiques</h1>
-            <ul>
-                {musicList.map((music) => (
-                    <li key={music.id} onClick={() => handleMusicClick(music.id)}>
-                        {music.name} - {music.artist}
-                    </li>
-                ))}
-            </ul>
+        <div className="music-page">
+            <div className="music-list">
+                <h1>Liste des musiques</h1>
+                <ul>
+                    {musicList.map((music) => (
+                        <li key={music.id} onClick={() => handleMusicClick(music.id)}>
+                            {music.name} - {music.artist}
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 };

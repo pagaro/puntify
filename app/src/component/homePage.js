@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import isTokenValid from "./security/isTokenValid";
+import isTokenValid from "../security/isTokenValid";
+import './homePage.css'
 
 function HomePage() {
     const [fields, setFields] = useState({isLogged: false, isAdmin: false});

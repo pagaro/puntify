@@ -70,10 +70,9 @@ const Footer = ({idMusic, onClose}) => {
                         src={fields.urlMusic}
                         ref={audioRef}
                         onTimeUpdate={handleTimeUpdate}
-                        // onDurationChange={handleDurationChange}
                     />
                     <div className="footer-controls">
-                        <button onClick={handlePlayPause}>{fields.isPlaying ? 'Pause' : 'Play'}</button>
+                        <button className='play' onClick={handlePlayPause}>{fields.isPlaying ? 'Pause' : 'Play'}</button>
                         <span>{Math.floor(fields.currentTime / 60)}:{Math.floor(fields.currentTime % 60)}</span>
                         <input
                             type="range"
@@ -83,7 +82,7 @@ const Footer = ({idMusic, onClose}) => {
                             onChange={handleSliderChange}
                         />
                         <span>{Math.floor(fields.duration / 60)}:{Math.floor(fields.duration % 60)}</span>
-                        <button onClick={handleClose}>×</button>
+                        <button className='close' onClick={handleClose}>×</button>
                     </div>
                 </div>
             )}

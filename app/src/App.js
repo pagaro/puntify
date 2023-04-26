@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Route, Routes} from 'react-router-dom';
-import HomePage from "./homePage";
+import HomePage from "./component/homePage";
 import LoginPage from "./form/loginPage";
 import RegisterPage from "./form/registerPage";
 import MusicPage from "./music/musicPage";
