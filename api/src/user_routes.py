@@ -43,7 +43,7 @@ async def get_user(user_id: str):
 async def update_user(user_id: str, user: UserIn):
     updated_user = await CRUDUser.update(user_id, user)
     if not updated_user:
-        raise HTTPException(status_code=404, detail="Utilisateur introuvable.")
+        raise HTTPException(status_code=404, detail="Modification impossible Utilisateur introuvable.")
     return updated_user
 
 
@@ -51,7 +51,7 @@ async def update_user(user_id: str, user: UserIn):
 async def delete_user(user_id: str):
     success = await CRUDUser.delete(user_id)
     if not success:
-        raise HTTPException(status_code=404, detail="Utilisateur introuvable.")
+        raise HTTPException(status_code=404, detail="Suppression impossible Utilisateur introuvable.")
     return {"detail": "Utilisateur supprimé avec succès."}
 
 

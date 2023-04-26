@@ -4,9 +4,6 @@ from bson.objectid import ObjectId
 from passlib.hash import bcrypt
 from db import get_user_collection
 
-# Remplacez ceci par votre propre clé secrète
-SECRET_KEY = "123"
-
 user_collection = get_user_collection()
 
 

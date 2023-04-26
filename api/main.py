@@ -11,6 +11,7 @@ app.include_router(music_router)
 origins = [
     "http://localhost:3000",  # L'origine de votre application React
     "http://localhost:80",
+    "*"
 ]
 
 app.add_middleware(
@@ -20,34 +21,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# app.include_router(
-#     admin_routes,
-#     prefix="/admin",
-#     tags=["admin"],
-#     dependencies=[Depends(is_user_admin)],
-#     responses={418: {"description": "I'm a teapot"}},
-# )
-#
-# app.include_router(
-#     users,
-#     prefix="/users",
-#     tags=["users"],
-#     dependencies=[Depends(is_user_admin)],
-#     responses={418: {"description": "I'm a teapot"}},
-# )
-#
-# app.include_router(
-#     login,
-#     prefix="",
-#     tags=["login"],
-#     responses={418: {"description": "I'm a teapot"}},
-# )
-#
-# app.include_router(
-#     music_router,
-#     prefix="/music",
-#     tags=["app"],
-#     dependencies=[Depends(is_token_valid)],
-#     responses={418: {"description": "I'm a teapot"}},
-# )
