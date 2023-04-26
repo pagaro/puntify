@@ -3,9 +3,9 @@ import axios from 'axios';
 import zxcvbn from 'zxcvbn';
 import {useNavigate} from "react-router-dom";
 import './form.css';
-import userLoginStatus from "./userLoginStatus";
 import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import isTokenValid from "../security/isTokenValid";
 
 function RegisterPage() {
     const [fields, setFields] = useState({email: '', password: '',confirmPassword :'', username:''});
@@ -36,8 +36,8 @@ function RegisterPage() {
     }
 
     useEffect(()=> {
-        userLoginStatus().then((result)=> {
-            if (result.isLoggedIng){
+        isTokenValid().then((result)=> {
+            if (result){
                 navigate("/");
             }
         })

@@ -3,9 +3,8 @@ services:
   db:
     container_name: db
     image: mongo
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: puntify
-      MONGO_INITDB_ROOT_PASSWORD: puntify
+    env_file:
+      - .env
     restart: always
     ports:
       - "27017:27017"
@@ -22,11 +21,8 @@ services:
     ports:
       - "8081:8081"
     restart: always
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: puntify
-      ME_CONFIG_MONGODB_ADMINPASSWORD: puntify
-      ME_CONFIG_MONGODB_SERVER: db
-      ME_CONFIG_MONGODB_HOSTNAME: db
+    env_file:
+      - .env
 
   api:
     container_name: api
@@ -36,12 +32,16 @@ services:
     links:
       - db
     restart: always
+    env_file:
+      - .env
     depends_on:
       - db
 
   app:
     container_name: app
     build: ./app
+    env_file:
+      - .env
     ports:
       - "3000:3000"
     restart: always

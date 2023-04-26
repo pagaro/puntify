@@ -1,18 +1,11 @@
 from fastapi import APIRouter, HTTPException, Depends, status
-from fastapi.security import HTTPBasic, HTTPBasicCredentials, OAuth2PasswordRequestForm
+from fastapi.security import HTTPBasic, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
-from pydantic import BaseModel
-
+from dependencies import is_token_valid, token_create,TokenToto
 from user import UserIn, UserOut, CRUDUser
 
 router = APIRouter()
 security = HTTPBasic()
-
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
 
 # Créez un objet CryptContext pour gérer le hachage et la vérification des mots de passe
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -26,7 +19,7 @@ async def authenticate_user(username: str, password: str):
         return False
     if not pwd_context.verify(secret=password, hash=user.hashed_password):
         return False
-    access_token = await CRUDUser.create_access_token(user)  # Appeler la fonction directement, sans utiliser CRUDUser
+    access_token = await token_create(user)  # Appeler la fonction directement, sans utiliser CRUDUser
     return access_token
 
 
@@ -50,7 +43,7 @@ async def get_user(user_id: str):
 async def update_user(user_id: str, user: UserIn):
     updated_user = await CRUDUser.update(user_id, user)
     if not updated_user:
-        raise HTTPException(status_code=404, detail="Utilisateur introuvable.")
+        raise HTTPException(status_code=404, detail="Modification impossible Utilisateur introuvable.")
     return updated_user
 
 
@@ -58,11 +51,11 @@ async def update_user(user_id: str, user: UserIn):
 async def delete_user(user_id: str):
     success = await CRUDUser.delete(user_id)
     if not success:
-        raise HTTPException(status_code=404, detail="Utilisateur introuvable.")
+        raise HTTPException(status_code=404, detail="Suppression impossible Utilisateur introuvable.")
     return {"detail": "Utilisateur supprimé avec succès."}
 
 
-@router.post("/login", response_model=Token)
+@router.post("/login", response_model=TokenToto)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     token = await authenticate_user(form_data.username, form_data.password)
     if not token:
@@ -75,5 +68,5 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
 
 @router.get("/verify-token", response_model=UserOut)
-async def verify_token(current_user: UserOut = Depends(CRUDUser.get_current_user)):
+async def verify_token(current_user: UserOut = Depends(is_token_valid)):
     return current_user

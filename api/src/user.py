@@ -1,30 +1,11 @@
-import asyncio
-from datetime import datetime, timedelta
-import jwt
-import pymongo
-from fastapi import Depends, HTTPException,status
-from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel, EmailStr
 from typing import Optional
-from motor.motor_asyncio import AsyncIOMotorClient
 from bson.objectid import ObjectId
 from passlib.hash import bcrypt
+from db import get_user_collection
 
-# Remplacez ces variables par vos propres valeurs
-username = "api"
-password = "api"
-database_name = "puntify"
-# Créez l'URI de connexion en incluant le nom d'utilisateur et le mot de passe
-# todo a changer quand ca sera sur docker
-connection_uri = f"mongodb://{username}:{password}@localhost/{database_name}"
+user_collection = get_user_collection()
 
-client = AsyncIOMotorClient(connection_uri)
-db = client["puntify"]
-user_collection = db["users"]
-
-# Remplacez ceci par votre propre clé secrète
-SECRET_KEY = "123"
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 class UserBase(BaseModel):
     email: EmailStr
@@ -75,11 +56,11 @@ class CRUDUser:
         return None
 
     @staticmethod
-    async def verify_password(email: str, password: str) -> bool:
-        user_dict = await user_collection.find_one({"email": email})
-        if user_dict:
-            return bcrypt.verify(password, user_dict["password"])
-        return False
+    async def get_by_id(user_id: str) -> Optional[UserOut]:
+        result = await user_collection.find_one({"_id": ObjectId(user_id)})
+        if result:
+            return UserOut(**result)
+        return None
 
     @staticmethod
     async def update(user_id: str, update_data: UserIn) -> Optional[UserOut]:
@@ -103,39 +84,8 @@ class CRUDUser:
         return result.deleted_count > 0
 
     @staticmethod
-    async def get_by_id(user_id: str) -> UserOut:
-        result = await db.users.find_one({"_id": ObjectId(user_id)})
-        if result:
-            return UserOut(**result)
-        return None
-
-    @staticmethod
-    async def create_access_token(user: UserOutPass):
-        # Utilisez l'ID de l'utilisateur comme identifiant unique
-        user_id = str(user.id)
-
-        # Définissez la durée de validité du token (par exemple, 24 heures)
-        expiration = datetime.utcnow() + timedelta(hours=1)
-
-        # Créez le payload du JWT
-        payload = {
-            "sub": user_id,
-            "exp": expiration,
-        }
-
-        # Générez le token JWT en utilisant la clé secrète et le payload
-        access_token = jwt.encode(payload, key=SECRET_KEY, algorithm="HS256")
-        return access_token
-
-    @staticmethod
-    async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserOut:
-        try:
-            payload = jwt.decode(token, key=SECRET_KEY, algorithms=["HS256"])
-            user_id = payload.get("sub")
-            print(payload)
-            if user_id is None:
-                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
-
-            return await CRUDUser.get_by_id(user_id)
-        except jwt.PyJWTError:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+    async def verify_password(email: str, password: str) -> bool:
+        user_dict = await user_collection.find_one({"email": email})
+        if user_dict:
+            return bcrypt.verify(password, user_dict["password"])
+        return False

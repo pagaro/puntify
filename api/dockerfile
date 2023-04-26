@@ -12,6 +12,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiez le reste de l'application dans le répertoire de travail
 COPY . .
 
+ENV PYTHONPATH "${PYTHONPATH}:/app/src"
+
 # Exposez le port sur lequel l'application sera accessible
 EXPOSE 8000
 

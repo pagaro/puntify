@@ -1,10 +1,37 @@
-import React from 'react';
+// MusicPlayer.js
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
-function PlayPage() {
+const PlayPage = () => {
+    const { id } = useParams();
+    const [musicURL, setMusicURL] = useState(null);
+
+    useEffect(() => {
+        const fetchMusicURL = async () => {
+            try {
+                // Remplacez cette URL par l'URL de votre API pour récupérer le fichier audio
+                const response = await axios.get(`http://localhost:8000/music/${id}`,{ withCredentials: true });
+                setMusicURL(response.data.url);
+            } catch (error) {
+                console.error("Erreur lors de la récupération de l'URL de la musique :", error);
+            }
+        };
+
+        fetchMusicURL();
+    }, [id]);
+
     return (
-        <div className="play-page">Play Pages</div>
+        <div className="music-player">
+            {musicURL ? (
+                <audio controls src={musicURL}>
+                    Votre navigateur ne prend pas en charge l'élément audio.
+                </audio>
+            ) : (
+                <p>Chargement...</p>
+            )}
+        </div>
     );
-}
+};
 
-// Exportation du composant HomePage en tant que composant par défaut pour être utilisé dans d'autres fichiers
 export default PlayPage;

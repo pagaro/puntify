@@ -15,7 +15,7 @@ db.users.insertMany([
         email: 'toto@gmail.com',
         password: '$2b$12$RUdLXbmI.St3Rk/iIDw8q.ZicQFDavf2eJ6BGDn0pz4/82VhSNa3i',
         username: 'toto',
-        admin: false,
+        admin: true,
     },
     {
         email: 'titi@gmail.com',
