@@ -33,12 +33,21 @@ const MusicList = ({onMusicClick}) => {
                 <ul>
                     {musicList.map((music) => (
                         <li key={music.id} onClick={() => handleMusicClick(music.id)}>
-                            {music.name} - {music.artist}
+                            <div className="music-item">
+                                <img className="cover-art" src={`data:image/jpeg;base64,${music.cover_art}`} alt={`${music.title} cover`} />
+                                <div className="music-info">
+                                    <h3>{music.title}</h3>
+                                    <p>{music.artist}</p>
+                                    <p>{music.album}</p>
+                                    <p>{music.duration} sec</p>
+                                </div>
+                            </div>
                         </li>
                     ))}
                 </ul>
             </div>
         </div>
+
     );
 };
 

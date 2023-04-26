@@ -3,16 +3,14 @@ from fastapi import APIRouter, Form, File, UploadFile, HTTPException, Depends
 from typing import List
 
 from dependencies import is_token_valid, is_user_admin
-from music import MusicIn, MusicOut, CRUDMusic, MusicInUpdate
+from music import MusicOut, CRUDMusic, MusicInUpdate
 
 router = APIRouter()
 
 
 @router.post("/music/", response_model=MusicOut, dependencies=[Depends(is_user_admin)])
-async def create_music(name: str = Form(...), artist: str = Form(...),
-                       duration: float = Form(...), file: UploadFile = File(...), ):
-    music_in = MusicIn(name=name, artist=artist, duration=duration, file=file)
-    return await CRUDMusic.create(music_in)
+async def create_music(file: UploadFile):
+    return await CRUDMusic.create(file)
 
 
 @router.get("/music/", response_model=List[MusicOut], dependencies=[Depends(is_token_valid)])

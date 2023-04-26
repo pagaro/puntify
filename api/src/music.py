@@ -1,6 +1,6 @@
 # src/music.py
-import io
 import os
+from base64 import b64encode
 from typing import Optional
 from pydantic import BaseModel
 from tinytag import TinyTag
@@ -15,12 +15,19 @@ music_collection = get_music_collection()
 
 
 class MusicBase(BaseModel):
-    name: str
-    artist: str
+    title: str
+    duration: int
+    album: Optional[str] = None  # album as string
+    albumartist: Optional[str] = None  # album artist as string
+    artist: Optional[str] = None  # artist name as string
+    bitrate: Optional[int] = None  # bitrate in kBits/s
+    filesize: Optional[int] = None   # file size in bytes
+    genre: Optional[str] = None   # genre as string
+    year: Optional[str] = None # year or date as string
     cover_art: Optional[str] = None
 
 
-class MusicIn(MusicBase):
+class MusicIn(BaseModel):
     file: UploadFile
 
 
@@ -31,37 +38,25 @@ class MusicInUpdate(MusicBase):
 class MusicOut(MusicBase):
     id: str
     url: Optional[str] = None
-    duration: int
-
-    class Config:
-        schema_extra = {
-            "example": {
-                "id": "6135b5da8e8390a6a1a6a983",
-                "name": "Exemple de musique",
-                "artist": "Artiste Exemple",
-                "cover": "URL de la pochette",
-                "duration": 180,
-                "url": "URL du fichier audio"
-            }
-        }
 
 
 class CRUDMusic:
     @staticmethod
-    async def create(music: MusicIn) -> MusicOut:
-        music_doc = music.dict()
-        file_music = music_doc.pop("file")
+    async def create(file_music: UploadFile) -> MusicOut:
         temp_file = os.path.join("./", file_music.filename)
+        cover_art = None
         try:
             with open(temp_file, 'wb') as f:
                 f.write(await file_music.read())
 
-            tag = TinyTag.get(temp_file)
-            duration = tag.duration
-            title = tag.title
-            year = tag.year
+            tag = TinyTag.get(temp_file, image=True)
+            cover = tag.get_image()
+            music_doc = tag.as_dict()
 
-
+            if not music_doc['title']:
+                music_doc['title'] = file_music.filename
+            if cover:
+                cover_art = b64encode(cover).decode('utf-8')
 
             music_file_gridfs = get_gridfs(bucket_name="music")
             with open(temp_file, 'rb') as f:
@@ -74,9 +69,7 @@ class CRUDMusic:
             raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="Invalid song format")
 
         music_doc["file_id"] = file_id
-        music_doc["title"] = title
-        music_doc["year"] = year
-        music_doc["duration"] = duration
+        music_doc["cover_art"] = cover_art
         music_id = await music_collection.insert_one(music_doc)
         return MusicOut(**music_doc, id=str(music_id.inserted_id))
 
