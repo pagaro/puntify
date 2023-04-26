@@ -1,0 +1,17 @@
+FROM python:3.11-alpine
+
+# Définissez le répertoire de travail
+WORKDIR /setup-music
+
+# Installez les dépendances Python
+RUN pip install --no-cache-dir requests
+
+# Copiez le reste de l'application dans le répertoire de travail
+COPY . .
+
+# Exposez le port sur lequel l'application sera accessible
+EXPOSE 8000
+
+
+# Démarrez l'application avec uvicorn
+CMD ["python3", "setup-music.py"]

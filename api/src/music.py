@@ -58,7 +58,7 @@ class CRUDMusic:
             if cover:
                 cover_art = b64encode(cover).decode('utf-8')
 
-            music_file_gridfs = get_gridfs(bucket_name="music")
+            music_file_gridfs = get_gridfs()
             with open(temp_file, 'rb') as f:
                 file_id = await music_file_gridfs.upload_from_stream(file_music.filename, f)
 
@@ -94,7 +94,7 @@ class CRUDMusic:
     @staticmethod
     async def stream_file(file_id: str):
         # Récupérez le fichier audio à partir de GridFS
-        gridfs = get_gridfs(bucket_name="music")
+        gridfs = get_gridfs()
         gridfs_file = await gridfs.open_download_stream(ObjectId(file_id))
 
         if not gridfs_file:
@@ -126,7 +126,7 @@ class CRUDMusic:
     async def delete(music_id: str) -> MusicOut:
         music_db = await music_collection.find_one({"_id": ObjectId(music_id)})
         if music_db:
-            grid_fs_bucket = get_gridfs(bucket_name="music")
+            grid_fs_bucket = get_gridfs()
             await grid_fs_bucket.delete(ObjectId(music_db["file_id"]))
 
             await music_collection.delete_one({"_id": ObjectId(music_id)})
