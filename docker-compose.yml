@@ -52,6 +52,8 @@ services:
 
   setup-music:
     container_name: setup-music
+    env_file:
+      - .env
     build: ./setup-music
     volumes:
       - ./setup-music:/setup-music
