@@ -23,13 +23,23 @@
 
 .music-list li {
     cursor: pointer;
+    transition: 0.3s;
 }
 
-.play-button {
+.music-list li:hover {
+    transform: scale(1.05);
+}
+
+.button-admin{
     background-color: transparent;
     border: none;
     font-size: 3rem;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.button-admin:hover{
+    transform: scale(1.1);
 }
 
 .music-item {

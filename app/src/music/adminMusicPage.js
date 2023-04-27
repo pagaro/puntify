@@ -3,10 +3,12 @@ import React, {useState, useEffect} from "react";
 import axios from "axios";
 import './music.css'
 import {useNavigate} from "react-router-dom";
+import {toast, ToastContainer} from "react-toastify";
 
-const MusicList = ({onMusicClick}) => {
+const AdminMusicPage = ({onMusicClick}) => {
     const [musicList, setMusicList] = useState([]);
     const navigate = useNavigate();
+    const [updateList, setUpdateList] = useState(false);
 
     useEffect(() => {
         const fetchMusicList = async () => {
@@ -14,22 +16,41 @@ const MusicList = ({onMusicClick}) => {
                 // Remplacez cette URL par l'URL de votre API pour récupérer la liste des musiques
                 const response = await axios.get("http://localhost:8000/music", {withCredentials: true});
                 setMusicList(response.data);
+                setUpdateList(false)
             } catch (error) {
                 console.error("Erreur lors de la récupération de la liste des musiques :", error);
             }
         };
-
         fetchMusicList();
-    }, []);
+    }, [updateList]);
 
     const handleMusicClick = (musicId) => {
-        navigate(`/music/play/${musicId}`);
+        navigate(`/admin/play/${musicId}`);
     };
+
 
 
     const handlePlayButtonClick = (e, musicId) => {
         e.stopPropagation();
         onMusicClick(musicId);
+    };
+
+    const handleRemove = (e, musicId) => {
+        e.stopPropagation();
+        const removeMusic = async () => {
+            try {
+                // Remplacez cette URL par l'URL de votre API pour récupérer la liste des musiques
+                const response = await axios.delete(`http://localhost:8000/music/${musicId}`, {withCredentials: true});
+                toast("Suppression réussie")
+                // console.log(musicList[musicId])
+                setUpdateList(!updateList);
+
+            } catch (error) {
+                toast(error.response.data.detail)
+            }
+        };
+
+        removeMusic();
     };
 
     return (
@@ -50,16 +71,20 @@ const MusicList = ({onMusicClick}) => {
                                         <p>{music.duration} sec</p>
                                     </div>
                                 </div>
-                                <button className="button-admin" onClick={(e) => handlePlayButtonClick(e, music.id)}>▶️
-                                </button>
+                                <div>
+                                <button className="button-admin" onClick={(e) => handlePlayButtonClick(e, music.id)}>▶️</button>
+                                <button className="button-admin" onClick={(e) => handleRemove(e, music.id)}>🚮</button>
+                                    <button className="button-admin" onClick={(e) =>  handleMusicClick(music.id)}>📝</button>
+                                </div>
                             </div>
                         </li>
                     ))}
                 </ul>
             </div>
+            <ToastContainer/>
         </div>
 
     );
 };
 
-export default MusicList;
+export default AdminMusicPage;

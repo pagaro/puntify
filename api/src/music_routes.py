@@ -35,11 +35,11 @@ async def stream_music(id_file: str):
     return stream_music
 
 
-@router.put("/music/{music_id}", response_model=MusicOut,dependencies=[Depends(is_user_admin)])
+@router.put("/music/{music_id}", response_model=MusicOut, dependencies=[Depends(is_user_admin)])
 async def update_music(music_id: str, music_data: MusicInUpdate):
     return await CRUDMusic.update(music_id, music_data)
 
 
-@router.delete("/music/{music_id}", response_model=MusicOut,dependencies=[Depends(is_user_admin)])
+@router.delete("/music/{music_id}", dependencies=[Depends(is_user_admin)])
 async def delete_music(music_id: str):
-    return await CRUDMusic.delete(music_id)
+    await CRUDMusic.delete(music_id)

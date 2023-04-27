@@ -5,16 +5,16 @@ import isTokenValid from "../security/isTokenValid";
 import Cookies from "js-cookie";
 
 const Header = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [fields, setFields] = useState({isLogged: false, isAdmin: false});
     const navigate = useNavigate();
 
-    useEffect(()=> {
-        isTokenValid().then((result)=> {
+    useEffect(() => {
+        isTokenValid().then((result) => {
             if (result) {
-                setIsLoggedIn(true);
+                setFields({...fields, isLogged: true, isAdmin: result.data.admin});
             }
         })
-    },[navigate])
+    }, [navigate])
 
     const handleHome = () => {
         navigate('/')
@@ -29,20 +29,29 @@ const Header = () => {
         navigate('/register')
     };
 
+    const handleAdmin = () => {
+        navigate('/admin')
+    };
+
     const handleLogout = () => {
         Cookies.remove('access_token')
-        setIsLoggedIn(false);
+        setFields({...fields, isLogged: false});
         window.location.reload();
     };
 
     return (
         <header>
             <button className="logo" onClick={handleHome}>Puntify</button>
-            {isLoggedIn ? (
+            {fields.isLogged ? (
                 <div className="button">
                     <button onClick={handleLogout}>
                         Sign out
                     </button>
+                    {fields.isAdmin && (
+                        <button onClick={handleAdmin}>
+                            Admin
+                        </button>
+                    )}
                 </div>
             ) : (
                 <div className="button">

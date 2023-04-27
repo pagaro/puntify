@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import './form.css'
 import {toast, ToastContainer} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
-const UploadPage = () => {
+const AdminUploadPage = () => {
     const [fileMusic, setFileMusic] = useState(null);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -41,4 +43,4 @@ const UploadPage = () => {
     );
 };
 
-export default UploadPage;
+export default AdminUploadPage;

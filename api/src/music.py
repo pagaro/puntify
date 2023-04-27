@@ -118,18 +118,17 @@ class CRUDMusic:
         if music_db:
             await music_collection.update_one({"_id": ObjectId(music_id)}, {"$set": music_data})
             music_db.update(music_data)
-            return MusicOut(**music_db)
+            return MusicOut(**music_db,id=music_id)
         else:
             raise HTTPException(status_code=404, detail="Music not found")
 
     @staticmethod
-    async def delete(music_id: str) -> MusicOut:
+    async def delete(music_id: str):
         music_db = await music_collection.find_one({"_id": ObjectId(music_id)})
         if music_db:
             grid_fs_bucket = get_gridfs()
             await grid_fs_bucket.delete(ObjectId(music_db["file_id"]))
 
             await music_collection.delete_one({"_id": ObjectId(music_id)})
-            return MusicOut(**music_db)
         else:
             raise HTTPException(status_code=404, detail="Music not found")

@@ -31,7 +31,7 @@ const PlayPage = ({onMusicClick}) => {
             {songInfo ? (
                 <div className='song-info'>
                     <h2>{songInfo.title}
-                        <button className="play-button" onClick={handlePlay}>▶️</button>
+                        <button className="button-admin" onClick={handlePlay}>▶️</button>
                     </h2>
                     <p>Artiste : {songInfo.artist}</p>
                     <p>Album : {songInfo.album}</p>
