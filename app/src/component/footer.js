@@ -31,6 +31,14 @@ const Footer = ({idMusic, onClose}) => {
         }
 
     }, [idMusic]);
+
+    useEffect(() => {
+        if (fields.urlMusic && idMusic || fields.isPlaying) {
+            handlePlayPause()
+        }
+    }, [fields.urlMusic]);
+
+
     const handlePlayPause = () => {
         setFields({
             ...fields, isPlaying: !fields.isPlaying
@@ -58,34 +66,33 @@ const Footer = ({idMusic, onClose}) => {
     };
 
     const handleClose = () => {
+        setFields({...fields, urlMusic: null})
         onClose();
     };
 
     return (
         <>
-            {idMusic && (
-                <div className="footer">
-                    <audio
-                        id="footer-audio"
-                        src={fields.urlMusic}
-                        ref={audioRef}
-                        onTimeUpdate={handleTimeUpdate}
+            <div className={`footer ${idMusic ? "active" : ""}`}>
+                <audio
+                    id="footer-audio"
+                    src={fields.urlMusic}
+                    ref={audioRef}
+                    onTimeUpdate={handleTimeUpdate}
+                />
+                <div className="footer-controls">
+                    <button className='play-close' onClick={handlePlayPause}>{fields.isPlaying ? '⏸️' : '▶️'}</button>
+                    <span>{Math.floor(fields.currentTime / 60)}:{Math.floor(fields.currentTime % 60)}</span>
+                    <input
+                        type="range"
+                        min="0"
+                        max={fields.duration}
+                        value={fields.currentTime}
+                        onChange={handleSliderChange}
                     />
-                    <div className="footer-controls">
-                        <button className='play' onClick={handlePlayPause}>{fields.isPlaying ? 'Pause' : 'Play'}</button>
-                        <span>{Math.floor(fields.currentTime / 60)}:{Math.floor(fields.currentTime % 60)}</span>
-                        <input
-                            type="range"
-                            min="0"
-                            max={fields.duration}
-                            value={fields.currentTime}
-                            onChange={handleSliderChange}
-                        />
-                        <span>{Math.floor(fields.duration / 60)}:{Math.floor(fields.duration % 60)}</span>
-                        <button className='close' onClick={handleClose}>×</button>
-                    </div>
+                    <span>{Math.floor(fields.duration / 60)}:{Math.floor(fields.duration % 60)}</span>
+                    <button className='play-close' onClick={handleClose}>🔽️</button>
                 </div>
-            )}
+            </div>
         </>
     );
 };

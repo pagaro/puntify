@@ -2,9 +2,11 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
 import './music.css'
+import {useNavigate} from "react-router-dom";
 
 const MusicList = ({onMusicClick}) => {
     const [musicList, setMusicList] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchMusicList = async () => {
@@ -21,9 +23,13 @@ const MusicList = ({onMusicClick}) => {
     }, []);
 
     const handleMusicClick = (musicId) => {
-        if (musicId) {
-            onMusicClick(musicId);
-        }
+        navigate(`/music/play/${musicId}`);
+    };
+
+
+    const handlePlayButtonClick = (e, musicId) => {
+        e.stopPropagation();
+        onMusicClick(musicId);
     };
 
     return (
@@ -34,13 +40,18 @@ const MusicList = ({onMusicClick}) => {
                     {musicList.map((music) => (
                         <li key={music.id} onClick={() => handleMusicClick(music.id)}>
                             <div className="music-item">
-                                <img className="cover-art" src={`data:image/jpeg;base64,${music.cover_art}`} alt={`${music.title} cover`} />
-                                <div className="music-info">
-                                    <h3>{music.title}</h3>
-                                    <p>{music.artist}</p>
-                                    <p>{music.album}</p>
-                                    <p>{music.duration} sec</p>
+                                <div style={{display:"flex"}}>
+                                    <img className="cover-art" src={`data:image/jpeg;base64,${music.cover_art}`}
+                                         alt={`${music.title} cover`}/>
+                                    <div className="music-info">
+                                        <h3>{music.title}</h3>
+                                        <p>{music.artist}</p>
+                                        <p>{music.album}</p>
+                                        <p>{music.duration} sec</p>
+                                    </div>
                                 </div>
+                                <button className="play-button" onClick={(e) => handlePlayButtonClick(e, music.id)}>▶️
+                                </button>
                             </div>
                         </li>
                     ))}

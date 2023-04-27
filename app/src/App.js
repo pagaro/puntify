@@ -33,7 +33,7 @@ function App() {
 
                 <Route exact path='/music' element={<PrivateRoute/>}>
                     <Route exact path='/music' element={<MusicPage onMusicClick={handleMusicClick}/>}/>
-                    <Route path="/music/play/:id" element={<PlayPage/>}/>
+                    <Route path="/music/play/:id" element={<PlayPage onMusicClick={handleMusicClick}/>}/>
                     <Route path="/music/upload" element={<UploadPage/>}/>
                 </Route>
 
