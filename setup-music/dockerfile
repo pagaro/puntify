@@ -4,7 +4,7 @@ FROM python:3.11-alpine
 WORKDIR /setup-music
 
 # Installez les dépendances Python
-RUN pip install --no-cache-dir requests dotenv
+RUN pip install --no-cache-dir requests python-dotenv
 
 # Copiez le reste de l'application dans le répertoire de travail
 COPY . .
