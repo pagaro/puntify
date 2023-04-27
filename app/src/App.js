@@ -5,10 +5,13 @@ import LoginPage from "./form/loginPage";
 import RegisterPage from "./form/registerPage";
 import MusicPage from "./music/musicPage";
 import PlayPage from "./music/playPage";
-import UploadPage from "./form/uploadPage";
+import AdminUploadPage from "./form/adminUploadPage";
 import PrivateRoute from "./security/PrivateRoute";
 import Footer from "./component/footer";
 import Header from "./component/header";
+import AdminMusicPage from "./music/adminMusicPage";
+import AdminPlayPage from "./form/adminPlayPage";
+
 function App() {
     const [id, setId] = useState(null);
 
@@ -22,7 +25,6 @@ function App() {
     }
 
 
-
     return (
         <>
             <Header/>
@@ -33,10 +35,13 @@ function App() {
 
                 <Route exact path='/music' element={<PrivateRoute/>}>
                     <Route exact path='/music' element={<MusicPage onMusicClick={handleMusicClick}/>}/>
-                    <Route path="/music/play/:id" element={<PlayPage/>}/>
-                    <Route path="/music/upload" element={<UploadPage/>}/>
+                    <Route path="/music/play/:id" element={<PlayPage onMusicClick={handleMusicClick}/>}/>
+                    <Route path="/music/upload" element={<AdminUploadPage/>}/>
                 </Route>
-
+                <Route exact path='/admin' element={<PrivateRoute/>}>
+                    <Route path="/admin" element={<AdminMusicPage onMusicClick={handleMusicClick}/>}/>
+                    <Route path="/admin/play/:id" element={<AdminPlayPage onMusicClick={handleMusicClick}/>}/>
+                </Route>
             </Routes>
             <Footer idMusic={id} onClose={handleOnClose}/>
         </>

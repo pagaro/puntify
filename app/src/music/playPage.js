@@ -1,34 +1,50 @@
-// MusicPlayer.js
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import {useParams} from "react-router-dom";
+import './music.css'
 
-const PlayPage = () => {
-    const { id } = useParams();
-    const [musicURL, setMusicURL] = useState(null);
+const PlayPage = ({onMusicClick}) => {
+    const [songInfo, setSongInfo] = useState(null);
+    const { id } = useParams()
 
     useEffect(() => {
-        const fetchMusicURL = async () => {
+        const fetchSongInfo = async () => {
             try {
-                // Remplacez cette URL par l'URL de votre API pour récupérer le fichier audio
-                const response = await axios.get(`http://localhost:8000/music/${id}`,{ withCredentials: true });
-                setMusicURL(response.data.url);
+                const response = await axios.get(`http://localhost:8000/music/${id}`, {
+                    withCredentials: true,
+                });
+                setSongInfo(response.data);
             } catch (error) {
-                console.error("Erreur lors de la récupération de l'URL de la musique :", error);
+                console.error('Erreur lors de la récupération des données', error);
             }
         };
 
-        fetchMusicURL();
-    }, [id]);
+        fetchSongInfo();
+    }, []);
+
+    const handlePlay = () => {
+        onMusicClick(id);
+    };
 
     return (
-        <div className="music-player">
-            {musicURL ? (
-                <audio controls src={musicURL}>
-                    Votre navigateur ne prend pas en charge l'élément audio.
-                </audio>
+        <div className='music-page'>
+            {songInfo ? (
+                <div className='song-info'>
+                    <h2>{songInfo.title}
+                        <button className="button-admin" onClick={handlePlay}>▶️</button>
+                    </h2>
+                    <p>Artiste : {songInfo.artist}</p>
+                    <p>Album : {songInfo.album}</p>
+                    <p>Année : {songInfo.year}</p>
+                    <p>Genre : {songInfo.genre}</p>
+                    <p>Durée : {songInfo.duration} secondes</p>
+                    <p>Bitrate : {songInfo.bitrate} kbps</p>
+                    <p>Taille du fichier : {songInfo.filesize} octets</p>
+                    <p>URL : {songInfo.url}</p>
+                    <img src={`data:image/jpeg;base64,${songInfo.cover_art}`} alt={`Couverture de l'album ${songInfo.album}`} />
+                </div>
             ) : (
-                <p>Chargement...</p>
+                <p>Chargement des informations...</p>
             )}
         </div>
     );

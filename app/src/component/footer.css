@@ -12,6 +12,12 @@
     background-color: #333;
     color: white;
     padding: 0 20px;
+    transform: translateY(100%);
+    transition: 0.2s;
+}
+
+.footer.active{
+    transform: translateY(0);
 }
 
 .footer-controls {
@@ -19,12 +25,10 @@
     align-items: center;
 }
 
-.footer-controls button {
+.footer-controls .play-close {
     background-color: transparent;
     border: none;
-    color: white;
-    font-size: 18px;
-    margin: 0 10px;
+    font-size: 2rem;
     cursor: pointer;
 }
 

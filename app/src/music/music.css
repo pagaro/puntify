@@ -1,40 +1,105 @@
+/* src/components/music-page.css */
+
 .music-page {
-    background-color: #f5f5f5;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 50px;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 .music-list {
-    width: 400px;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
+    list-style-type: none;
+    padding: 0;
 }
 
+.music-list h1 {
+
+    margin-bottom: 20px;
+    text-align: center;
+}
 
 .music-list ul {
     list-style-type: none;
-    padding: 0;
-    margin-top: 10px;
-    margin-bottom: 0;
-    background-color: #f2f2f2;
-    border-radius: 5px;
-    overflow: hidden;
 }
 
 .music-list li {
-    padding: 10px;
-    text-align: center;
-    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .music-list li:hover {
-    background-color: #e0e0e0;
+    transform: scale(1.05);
+}
+
+.button-admin{
+    background-color: transparent;
+    border: none;
+    font-size: 3rem;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.button-admin:hover{
+    transform: scale(1.1);
+}
+
+.music-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    justify-content: space-between;
+}
+
+.cover-art {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.music-info h3 {
+    margin: 0;
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+
+.music-info p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.song-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f1f1f1;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.song-info h2 {
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 24px;
+    color: #444;
+}
+
+.song-info p {
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 16px;
+    color: #555;
+}
+
+.song-info img {
+    max-width: 250px;
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-top: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
 }

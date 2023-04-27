@@ -50,6 +50,12 @@ services:
     depends_on:
       - api
 
+  setup-music:
+    container_name: setup-music
+    build: ./setup-music
+    volumes:
+      - ./setup-music:/setup-music
+
 volumes:
   db_data:
   db_config:
