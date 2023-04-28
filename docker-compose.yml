@@ -37,18 +37,18 @@ services:
     depends_on:
       - db
 
-#  app:
-#    container_name: app
-#    build: ./app
-#    env_file:
-#      - .env
-#    ports:
-#      - "3000:3000"
-#    restart: always
-#    links:
-#      - db
-#    depends_on:
-#      - api
+  app:
+    container_name: app
+    build: ./app
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    restart: always
+    links:
+      - db
+    depends_on:
+      - api
 
   setup-music:
     container_name: setup-music

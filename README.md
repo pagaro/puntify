@@ -43,6 +43,14 @@ Le script `setup_music/setup_music.py` ajoute automatiquement les musiques qui s
 
 Lors de l'exécution de la commande `docker-compose up -d`, la base de données sera initialisée avec les données définies dans le script `mongo-init.js` et les musiques du dossier `setup_music` seront ajoutées à la base de données par le service `setup-music`.
 
+## Administration
+
+L'administration du site est accessible uniquement par l'utilisateur _toto@gmail.com_. L'utilisateur administrateur peut ajouter, modifier ou supprimer des musiques via la page `http://localhost:3000/admin`.
+
+Les autres utilisateurs peuvent potentiellement accéder à cette page s'ils cherchent un peu, mais toutes les requêtes API effectuées à partir de cette page par un utilisateur non-administrateur seront bloquées. En cas de tentative d'accès non autorisé aux fonctionnalités d'administration, un message d'erreur sera affiché à l'utilisateur.
+
+Pour garantir la sécurité de l'administration, assurez-vous de ne partager les identifiants de l'administrateur avec personne et de choisir un mot de passe fort pour le compte administrateur.
+
 ## Utilisation de Docker Compose
 
 Docker Compose est un outil pour définir et exécuter des applications multi-conteneurs Docker. Il utilise un fichier de configuration YAML pour décrire les services, les réseaux et les volumes nécessaires pour votre application.
